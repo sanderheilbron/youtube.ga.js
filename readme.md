@@ -13,10 +13,11 @@ All player events are only tracked once, except for video quality events. Restar
 * Label: URL of embedded video on YouTube.
 
 #####Example
-	_gaq.push(['_trackEvent', 'YouTube', 'Started video', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Paused video', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Completed video', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-
+```js
+_gaq.push(['_trackEvent', 'YouTube', 'Started video', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Paused video', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Completed video', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+```
 ### Progress event trackers
 
 * Category: YouTube
@@ -27,10 +28,11 @@ All player events are only tracked once, except for video quality events. Restar
 * Label: URL of embedded video on YouTube.
 
 #####Example
-	_gaq.push(['_trackEvent', 'YouTube', 'Played video: 25%', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Played video: 50%', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Played video: 75%', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-
+```js
+_gaq.push(['_trackEvent', 'YouTube', 'Played video: 25%', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Played video: 50%', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Played video: 75%', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+```
 
 ### Quality event trackers
 The YouTube player fires a "quality" event at the start of the video and subsequent events when the user selects a quality option from the player. YouTube selects the most appropriate playback quality, which will vary for different users, videos, systems and other playback conditions.
@@ -44,13 +46,14 @@ The YouTube player fires a "quality" event at the start of the video and subsequ
 	* **240p Quality**
 * Label: URL of embedded video on YouTube.
 
-#####Example	
-	_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 1080p HD', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 720p HD', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 480p', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 360p', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-	_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 240p', http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded, undefined, true]);
-
+#####Example
+```js
+_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 1080p HD', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 720p HD', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 480p', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 360p', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+_gaq.push(['_trackEvent', 'YouTube', 'Video quality: 240p', 'http://www.youtube.com/watch?v=Rk6_hdRtJOE&feature=player_embedded', undefined, true]);
+```
 
 ### Bounce rate
 The event trackers do not impact bounce rate of the page which embeds the video. The value of the opt_noninteraction parameter is set to `true`.
@@ -60,30 +63,32 @@ The event trackers do not impact bounce rate of the page which embeds the video.
 Include the scripts in the body section of the HTML document, just before the `</body>` tag. You’ll need to be running on a web server instead of opening the file directly in your browser. Flash and JS security restrictions will prevent the API from working when run locally.
 
 ### Basic
-	<script src="path/to/youtube.ga.min.js"></script>
-	<script>
-		var configYouTubePlayer = {
-			videoID: 'Rk6_hdRtJOE' // The YouTube video ID that identifies the video that the player will load.
-		};
-	</script>
-	
+```html
+<script src="path/to/youtube.ga.min.js"></script>
+<script>
+	var configYouTubePlayer = {
+		videoID: 'Rk6_hdRtJOE' // The YouTube video ID that identifies the video that the player will load.
+	};	
+</script>
+```	
 ### With some options
-	<script src="path/to/youtube.ga.min.js"></script>
-	<script>
-		var configYouTubePlayer = {
-			videoID: 'Rk6_hdRtJOE', // The YouTube video ID that identifies the video that the player will load.
-			height: 390, // The height of the video player. The default value is 390.
-			width: 640, // The width of the video player. The default value is 640.
-			trackProgress: true, // Enable progress event tracking.
-			trackPlaybackQuality: true // // Enable video quality event tracking.
-		};
-	</script>	
-
+```html
+<script src="path/to/youtube.ga.min.js"></script>
+<script>
+	var configYouTubePlayer = {
+		videoID: 'Rk6_hdRtJOE', // The YouTube video ID that identifies the video that the player will load.
+		height: 390, // The height of the video player. The default value is 390.
+		width: 640, // The width of the video player. The default value is 640.
+		trackProgress: true, // Enable progress event tracking.
+		trackPlaybackQuality: true // // Enable video quality event tracking.
+	};
+</script>	
+```
 
 Put the following div element inside the body element. The script will replace the div element with an iframe tag.
-
-	<div id="ytplayer"></div>
-	
+```html
+<div id="ytplayer"></div>
+```	
 The iframe embeds a YouTube video player and the YouTube iframe API posts content to the iframe tag on your page. This approach allows YouTube to serve an HTML5 player rather than a Flash player for mobile devices that do not support Flash.
 
 ## Demo
@@ -97,7 +102,7 @@ Demo will be available soon.
 Tested in Chrome (21), Firefox (15), Safari (5,6), IE (8,9). Also tested on iOS.
 
 ## Contact
-If you have any questions please find me on Twitter at [@sanderheilbron](@sanderheilbron) or send me an [email](sanderheilbron@gmail.com). 
+If you have any questions please find me on Twitter at [@sanderheilbron](http://twitter.com/sanderheilbron) or send me an [email](mailto:sanderheilbron@gmail.com). 
 
 ## Issues
 Have a bug? Please create an issue here on GitHub!
