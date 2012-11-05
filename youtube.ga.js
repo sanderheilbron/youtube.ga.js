@@ -53,36 +53,32 @@ function onPlayerReady(event) {
 }
 
 function onPlayerProgressChange() {
-    trackProgress = configYouTubePlayer.trackProgress;
-    duration = player.getDuration(); // Returns the duration in seconds of the currently playing video.
-    currentTime = player.getCurrentTime(); // Returns the elapsed time in seconds since the video started playing.
-    timePercentComplete = currentTime / duration * 100; // Calculate percent complete
-    timePercentComplete = Math.round(timePercentComplete); // Round to a whole number
+    if (!configYouTubePlayer.trackProgress || !_gaq) {
+        return;
+    }
 
-    if (trackProgress) {
-        var progressTracked;
+     // Calculate percent complete
+    timePercentComplete = Math.round(player.getCurrentTime() / player.getDuration() * 100);
 
-        if (timePercentComplete > 24 && !progress25) {
-            progress = 'Played video: 25%';
-            progress25 = true;
-            progressTracked = true;
-        }
+    var progress;
 
-        if (timePercentComplete > 49 && !progress50) {
-            progress = 'Played video: 50%';
-            progress50 = true;
-            progressTracked = true;
-        }
+    if (timePercentComplete > 24 && !progress25) {
+        progress = '25%';
+        progress25 = true;
+    }
 
-        if (timePercentComplete > 74 && !progress75) {
-            progress = 'Played video: 75%';
-            progress75 = true;
-            progressTracked = true;
-        }
+    if (timePercentComplete > 49 && !progress50) {
+        progress = '50%';
+        progress50 = true;
+    }
 
-        if (progressTracked) {
-            _gaq.push(['_trackEvent', 'YouTube', progress, url, undefined, true]);
-        }
+    if (timePercentComplete > 74 && !progress75) {
+        progress = '75%';
+        progress75 = true;
+    }
+
+    if (progress) {
+        _gaq.push(['_trackEvent', 'YouTube', 'Played video: ' + progress, url, undefined, true]);
     }
 }
 
