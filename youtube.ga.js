@@ -41,8 +41,12 @@ function onYouTubePlayerAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setInterval(onPlayerProgressChange, 500); // Check video status every 500ms
-    progress25 = progress50 = progress75 = false;
+    // Check video status every 500ms
+    setInterval(onPlayerProgressChange, 500);
+
+    progress25 = false;
+    progress50 = false;
+    progress75 = false;
     url = player.getVideoUrl();
     videoPlayed = false;
     videoCompleted = false;
