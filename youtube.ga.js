@@ -83,37 +83,32 @@ function onPlayerProgressChange() {
 }
 
 function onPlayerPlaybackQualityChange(event) {
-    trackPlaybackQuality = configYouTubePlayer.trackPlaybackQuality;
+    if (!configYouTubePlayer.trackPlaybackQuality || !_gaq) {
+        return;
+    }
 
-    if (trackPlaybackQuality) {
-        var qualityTracked;
+    var quality;
 
-        switch (event.data) {
+    switch (event.data) {
         case 'hd1080':
-            quality = 'Video quality: 1080p HD';
-            qualityTracked = true;
+            quality = '1080p HD';
             break;
         case 'hd720':
-            quality = 'Video quality: 720p HD';
-            qualityTracked = true;
+            quality = '720p HD';
             break;
         case 'large':
-            quality = 'Video quality: 480p';
-            qualityTracked = true;
+            quality = '480p';
             break;
         case 'medium':
-            quality = 'Video quality: 360p';
-            qualityTracked = true;
+            quality = '360p';
             break;
         case 'small':
-            quality = 'Video quality: 240p';
-            qualityTracked = true;
+            quality = '240p';
             break;
-        }
+    }
 
-        if (qualityTracked) {
-            _gaq.push(['_trackEvent', 'YouTube', quality, url, undefined, true]);
-        }
+    if (quality) {
+        _gaq.push(['_trackEvent', 'YouTube', 'Video quality: ' + quality, url, undefined, true]);
     }
 }
 
