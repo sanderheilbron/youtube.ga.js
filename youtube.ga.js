@@ -15,16 +15,29 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var player;
 
 function onYouTubePlayerAPIReady() {
-    player = new YT.Player('ytplayer', {
+    // Replace the 'ytplayer' element with an <iframe> and
+    // YouTube player after the API code downloads.
+    var playerOptions = {
         height: configYouTubePlayer.height,
         width: configYouTubePlayer.width,
         videoId: configYouTubePlayer.videoID,
+        playerVars: {},
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
             'onPlaybackQualityChange': onPlayerPlaybackQualityChange
         }
-    });
+    };
+
+    for (var setting in configYouTubePlayer.playerVars) {
+        if (!configYouTubePlayer.playerVars.hasOwnProperty(setting)) {
+            continue;
+        }
+
+        playerOptions.playerVars[setting] = configYouTubePlayer.playerVars[setting];
+    }
+
+    player = new YT.Player('ytplayer', playerOptions);
 }
 
 function onPlayerReady(event) {
