@@ -1,131 +1,137 @@
 /*!
- * youtube.ga.js | v0.1
+ * youtube.ga.js | v0.2
  * Copyright (c) 2012 Sander Heilbron (http://sanderheilbron.nl)
+ * Edits by Ali Karbassi (http://karbassi.com)
  * MIT licensed
  */
 
 // Load the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/player_api";
+tag.src = "//youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// Replace the 'ytplayer' element with an <iframe> and
-// YouTube player after the API code downloads.
-var player;
+var YT_GA = YT_GA || {};
 
 function onYouTubePlayerAPIReady() {
-    player = new YT.Player('ytplayer', {
+    // Replace the 'ytplayer' element with an <iframe> and
+    // YouTube player after the API code downloads.
+    var playerOptions = {
         height: configYouTubePlayer.height,
         width: configYouTubePlayer.width,
         videoId: configYouTubePlayer.videoID,
+        playerVars: {},
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
             'onPlaybackQualityChange': onPlayerPlaybackQualityChange
         }
-    });
+    };
+
+    for (var setting in configYouTubePlayer.playerVars) {
+        if (!configYouTubePlayer.playerVars.hasOwnProperty(setting)) {
+            continue;
+        }
+
+        playerOptions.playerVars[setting] = configYouTubePlayer.playerVars[setting];
+    }
+
+    YT_GA.player = new YT.Player('ytplayer', playerOptions);
 }
 
 function onPlayerReady(event) {
-    setInterval(onPlayerProgressChange, 500); // Check video status every 500ms    
-    progress25 = progress50 = progress75 = false;
-    url = player.getVideoUrl();
-    videoPlayed = false;
-    videoCompleted = false;
+    // Check video status every 500ms
+    setInterval(onPlayerProgressChange, 500);
+
+    YT_GA.progress25 = false;
+    YT_GA.progress50 = false;
+    YT_GA.progress75 = false;
+    YT_GA.url = YT_GA.player.getVideoUrl();
+    YT_GA.videoPlayed = false;
+    YT_GA.videoCompleted = false;
 }
 
 function onPlayerProgressChange() {
-    trackProgress = configYouTubePlayer.trackProgress;
-    duration = player.getDuration(); // Returns the duration in seconds of the currently playing video.
-    currentTime = player.getCurrentTime(); // Returns the elapsed time in seconds since the video started playing. 
-    timePercentComplete = currentTime / duration * 100; // Calculate percent complete
-    timePercentComplete = Math.round(timePercentComplete); // Round to a whole number
+    if (!configYouTubePlayer.trackProgress || !_gaq) {
+        return;
+    }
 
-    if (trackProgress) {
-        var progressTracked;
+     // Calculate percent complete
+    YT_GA.timePercentComplete = Math.round(YT_GA.player.getCurrentTime() / YT_GA.player.getDuration() * 100);
 
-        if (timePercentComplete > 24 && !progress25) {
-            progress = 'Played video: 25%';
-            progress25 = true;
-            progressTracked = true;
-        }
+    var progress;
 
-        if (timePercentComplete > 49 && !progress50) {
-            progress = 'Played video: 50%';
-            progress50 = true;
-            progressTracked = true;
-        }
+    if (YT_GA.timePercentComplete > 24 && !YT_GA.progress25) {
+        progress = '25%';
+        YT_GA.progress25 = true;
+    }
 
-        if (timePercentComplete > 74 && !progress75) {
-            progress = 'Played video: 75%';
-            progress75 = true;
-            progressTracked = true;
-        }
+    if (YT_GA.timePercentComplete > 49 && !YT_GA.progress50) {
+        progress = '50%';
+        YT_GA.progress50 = true;
+    }
 
-        if (progressTracked) {
-            _gaq.push(['_trackEvent', 'YouTube', progress, url, undefined, true]);
-        }
+    if (YT_GA.timePercentComplete > 74 && !YT_GA.progress75) {
+        progress = '75%';
+        YT_GA.progress75 = true;
+    }
+
+    if (progress) {
+        _gaq.push(['_trackEvent', 'YouTube', 'Played video: ' + progress, YT_GA.url, undefined, true]);
     }
 }
 
 function onPlayerPlaybackQualityChange(event) {
-    trackPlaybackQuality = configYouTubePlayer.trackPlaybackQuality;
+    if (!configYouTubePlayer.trackPlaybackQuality || !_gaq) {
+        return;
+    }
 
-    if (trackPlaybackQuality) {
-        var qualityTracked;
+    var quality;
 
-        switch (event.data) {
+    switch (event.data) {
         case 'hd1080':
-            quality = 'Video quality: 1080p HD';
-            qualityTracked = true;
+            quality = '1080p HD';
             break;
         case 'hd720':
-            quality = 'Video quality: 720p HD';
-            qualityTracked = true;
+            quality = '720p HD';
             break;
         case 'large':
-            quality = 'Video quality: 480p';
-            qualityTracked = true;
+            quality = '480p';
             break;
         case 'medium':
-            quality = 'Video quality: 360p';
-            qualityTracked = true;
+            quality = '360p';
             break;
         case 'small':
-            quality = 'Video quality: 240p';
-            qualityTracked = true;
+            quality = '240p';
             break;
-        }
+    }
 
-        if (qualityTracked) {
-            _gaq.push(['_trackEvent', 'YouTube', quality, url, undefined, true]);
-        }
+    if (quality) {
+        _gaq.push(['_trackEvent', 'YouTube', 'Video quality: ' + quality, YT_GA.url, undefined, true]);
     }
 }
 
 function onPlayerStateChange(event) {
-    switch (event.data) {
-    case YT.PlayerState.PLAYING:
-        if (!videoPlayed) {
-            _gaq.push(['_trackEvent', 'YouTube', 'Started video', url, undefined, true]);
-            videoPaused = false;
-            videoPlayed = true; //  Avoid subsequent play trackings
-        }
-        break;
-
-    case YT.PlayerState.PAUSED:
-        if (timePercentComplete < 92 && !videoPaused) {
-            _gaq.push(['_trackEvent', 'YouTube', 'Paused video', url, undefined, true]);
-            videoPaused = true; // Avoid subsequent pause trackings
-        }
-        break;
-
-    case YT.PlayerState.ENDED:
-        if (!videoCompleted) {
-            _gaq.push(['_trackEvent', 'YouTube', 'Completed video', url, undefined, true]);
-            videoCompleted = true; // Avoid subsequent finish trackings
-        }
-        break;
+    if (!_gaq) {
+        return;
     }
+
+    if (event.data === YT.PlayerState.PLAYING && !YT_GA.videoPlayed) {
+
+        _gaq.push(['_trackEvent', 'YouTube', 'Started video', YT_GA.url, undefined, true]);
+        YT_GA.videoPaused = false;
+        YT_GA.videoPlayed = true; //  Avoid subsequent play trackings
+
+    } else if (event.data === YT.PlayerState.PAUSED && (YT_GA.timePercentComplete < 92 && !YT_GA.videoPaused)) {
+
+        _gaq.push(['_trackEvent', 'YouTube', 'Paused video', YT_GA.url, undefined, true]);
+        YT_GA.videoPaused = true; // Avoid subsequent pause trackings
+
+    } else if (event.data === YT.PlayerState.ENDED && !YT_GA.videoCompleted) {
+
+        _gaq.push(['_trackEvent', 'YouTube', 'Completed video', YT_GA.url, undefined, true]);
+        YT_GA.videoCompleted = true; // Avoid subsequent finish trackings
+
+    }
+
 }
