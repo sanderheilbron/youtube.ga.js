@@ -28,7 +28,7 @@ function onYouTubePlayerAPIReady() {
 }
 
 function onPlayerReady(event) {
-    setInterval(onPlayerProgressChange, 500); // Check video status every 500ms    
+    setInterval(onPlayerProgressChange, 500); // Check video status every 500ms
     progress25 = progress50 = progress75 = false;
     url = player.getVideoUrl();
     videoPlayed = false;
@@ -38,7 +38,7 @@ function onPlayerReady(event) {
 function onPlayerProgressChange() {
     trackProgress = configYouTubePlayer.trackProgress;
     duration = player.getDuration(); // Returns the duration in seconds of the currently playing video.
-    currentTime = player.getCurrentTime(); // Returns the elapsed time in seconds since the video started playing. 
+    currentTime = player.getCurrentTime(); // Returns the elapsed time in seconds since the video started playing.
     timePercentComplete = currentTime / duration * 100; // Calculate percent complete
     timePercentComplete = Math.round(timePercentComplete); // Round to a whole number
 
