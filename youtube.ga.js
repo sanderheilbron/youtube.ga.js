@@ -113,27 +113,26 @@ function onPlayerPlaybackQualityChange(event) {
 }
 
 function onPlayerStateChange(event) {
-    switch (event.data) {
-    case YT.PlayerState.PLAYING:
-        if (!videoPlayed) {
-            _gaq.push(['_trackEvent', 'YouTube', 'Started video', url, undefined, true]);
-            videoPaused = false;
-            videoPlayed = true; //  Avoid subsequent play trackings
-        }
-        break;
-
-    case YT.PlayerState.PAUSED:
-        if (timePercentComplete < 92 && !videoPaused) {
-            _gaq.push(['_trackEvent', 'YouTube', 'Paused video', url, undefined, true]);
-            videoPaused = true; // Avoid subsequent pause trackings
-        }
-        break;
-
-    case YT.PlayerState.ENDED:
-        if (!videoCompleted) {
-            _gaq.push(['_trackEvent', 'YouTube', 'Completed video', url, undefined, true]);
-            videoCompleted = true; // Avoid subsequent finish trackings
-        }
-        break;
+    if (!_gaq) {
+        return;
     }
+
+    if (event.data === YT.PlayerState.PLAYING && !videoPlayed) {
+
+        _gaq.push(['_trackEvent', 'YouTube', 'Started video', url, undefined, true]);
+        videoPaused = false;
+        videoPlayed = true; //  Avoid subsequent play trackings
+
+    } else if (event.data === YT.PlayerState.PAUSED && (timePercentComplete < 92 && !videoPaused)) {
+
+        _gaq.push(['_trackEvent', 'YouTube', 'Paused video', url, undefined, true]);
+        videoPaused = true; // Avoid subsequent pause trackings
+
+    } else if (event.data === YT.PlayerState.ENDED && !videoCompleted) {
+
+        _gaq.push(['_trackEvent', 'YouTube', 'Completed video', url, undefined, true]);
+        videoCompleted = true; // Avoid subsequent finish trackings
+
+    }
+
 }
