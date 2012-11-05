@@ -1,6 +1,7 @@
 /*!
- * youtube.ga.js | v0.1
+ * youtube.ga.js | v0.2
  * Copyright (c) 2012 Sander Heilbron (http://sanderheilbron.nl)
+ * Edits by Ali Karbassi (http://karbassi.com)
  * MIT licensed
  */
 
