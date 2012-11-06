@@ -8,25 +8,17 @@ Include the scripts in the body section of the HTML document, just before the `<
 ```html
 <script src="path/to/youtube.ga.min.js"></script>
 <script>
-	var configYouTubePlayer = {
-		videoID: 'Rk6_hdRtJOE' // The YouTube video ID that identifies the video that the player will load.
-	};
+    var configYouTubePlayer = {
+        videoID: 'Rk6_hdRtJOE' // The YouTube video ID that identifies the video that the player will load.
+    };
 </script>
 ```
 ### With some options
 ```html
 <script src="path/to/youtube.ga.min.js"></script>
 <script>
-	var configYouTubePlayer = {
-		videoID: 'Rk6_hdRtJOE', // The YouTube video ID that identifies the video that the player will load.
-		height: 390, // The height of the video player. The default value is 390.
-		width: 640, // The width of the video player. The default value is 640.
-		trackProgress: true, // Enable progress event tracking.
-		trackPlaybackQuality: true //
-	};
-
-	var configYouTubePlayer = {
-		// The YouTube video ID that identifies the video that the player will load.
+    var configYouTubePlayer = {
+        // The YouTube video ID that identifies the video that the player will load.
         videoID: 'Rk6_hdRtJOE',
 
         // The height of the video player. The default value is 390.
@@ -57,17 +49,17 @@ Include the scripts in the body section of the HTML document, just before the `<
 
         // Messages to send to Google Analytics
         messages: {
-	        progress25: 'Video 25%',
-	        progress50: 'Video 50%',
-	        progress75: 'Video 75%',
-	        started: 'Video Start',
-	        paused: 'Video Paused',
-	        completed: 'Video Completed',
-	        quality1080: 'Video Quality: 1080p HD',
-	        quality720: 'Video Quality: 720p HD',
-	        quality480: 'Video Quality: 480p',
-	        quality360: 'Video Quality: 360p',
-	        quality240: 'Video Quality: 240p'
+            progress25: 'Video 25%',
+            progress50: 'Video 50%',
+            progress75: 'Video 75%',
+            started: 'Video Start',
+            paused: 'Video Paused',
+            completed: 'Video Completed',
+            quality1080: 'Video Quality: 1080p HD',
+            quality720: 'Video Quality: 720p HD',
+            quality480: 'Video Quality: 480p',
+            quality360: 'Video Quality: 360p',
+            quality240: 'Video Quality: 240p'
 
             // Setting to false will not track this event
             paused: false
@@ -99,9 +91,9 @@ All player events are only tracked once, except for video quality events. Restar
 ### Default event trackers
 * Category: YouTube
 * Action:
-	* **Started video**: when the video starts playing.
-	* **Paused video**: captured if it occurs before 92% of the video has been viewed. This limit is in place because the YouTube player fires a "pause" event immediately before the finish event.
-	* **Completed video**: when the video reaches 100% completion.
+    * **Started video**: when the video starts playing.
+    * **Paused video**: captured if it occurs before 92% of the video has been viewed. This limit is in place because the YouTube player fires a "pause" event immediately before the finish event.
+    * **Completed video**: when the video reaches 100% completion.
 * Label: URL of embedded video on YouTube.
 
 #####Example
@@ -114,9 +106,9 @@ _gaq.push(['_trackEvent', 'YouTube', 'Completed video', 'http://www.youtube.com/
 
 * Category: YouTube
 * Action:
-	* **25% Progress**: when the video reaches 25% of the total video time.
-	* **50% Progress**: when the video reaches 50% of the total video time.
-	* **75% Progress**: when the video reaches 75% of the total video time.
+    * **25% Progress**: when the video reaches 25% of the total video time.
+    * **50% Progress**: when the video reaches 50% of the total video time.
+    * **75% Progress**: when the video reaches 75% of the total video time.
 * Label: URL of embedded video on YouTube.
 
 #####Example
@@ -131,11 +123,11 @@ The YouTube player fires a "quality" event at the start of the video and subsequ
 
 * Category: YouTube
 * Action:
-	* **1080 HD Quality**
-	* **720p HD Quality**
-	* **480p Quality**
-	* **360p Quality**
-	* **240p Quality**
+    * **1080 HD Quality**
+    * **720p HD Quality**
+    * **480p Quality**
+    * **360p Quality**
+    * **240p Quality**
 * Label: URL of embedded video on YouTube.
 
 #####Example
