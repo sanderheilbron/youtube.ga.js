@@ -108,12 +108,22 @@ If you have any questions please find me on Twitter at [@sanderheilbron](http://
 Have a bug? Please create an issue here on GitHub!
 
 ## Changelog
-0.1 (9/12/12): Initial release.
+### 0.2 (11/05/12):
+ - Changed source to allow http:// or https://
+ - Changed from player_api to iframe_api.
+ - Added option to pull in YouTube API playerVars.
+ - Created namespace.
+ - Restructured functions to be more efficient.
+ - Code cleanup.
+
+### 0.1 (9/12/12): 
+ - Initial release.
 
 ## License
 Licensed under the MIT license.
 
 Copyright (C) 2012 Sander Heilbron, http://sanderheilbron.nl
+Edits by Ali Karbassi, http://karbassi.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
