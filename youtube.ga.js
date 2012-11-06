@@ -59,6 +59,7 @@ function onYouTubePlayerAPIReady() {
         YT_GA.messages[message] = configYouTubePlayer.messages[message];
     }
 
+    // Create YouTube player
     YT_GA.player = new YT.Player('ytplayer', playerOptions);
 }
 
