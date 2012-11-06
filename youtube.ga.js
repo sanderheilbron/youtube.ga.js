@@ -38,17 +38,17 @@ function onYouTubePlayerAPIReady() {
 
     // Messages for GA
     YT_GA.messages = {
-        progress25 : 'Video 25%',
-        progress50 : 'Video 50%',
-        progress75 : 'Video 75%',
-        started : 'Video Start',
-        paused : 'Video Paused',
-        completed : 'Video Completed',
-        quality1080 : 'Video Quality: 1080p HD',
-        quality720 : 'Video Quality: 720p HD',
-        quality480 : 'Video Quality: 480p',
-        quality360 : 'Video Quality: 360p',
-        quality240 : 'Video Quality: 240p'
+        progress25: 'Video 25%',
+        progress50: 'Video 50%',
+        progress75: 'Video 75%',
+        started: 'Video Start',
+        paused: 'Video Paused',
+        completed: 'Video Completed',
+        quality1080: 'Video Quality: 1080p HD',
+        quality720: 'Video Quality: 720p HD',
+        quality480: 'Video Quality: 480p',
+        quality360: 'Video Quality: 360p',
+        quality240: 'Video Quality: 240p'
     };
 
     for (var message in YT_GA.messages) {
