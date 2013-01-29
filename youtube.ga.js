@@ -52,7 +52,7 @@ function onPlayerReady(event) {
 }
 
 function onPlayerProgressChange() {
-    if (!configYouTubePlayer.trackProgress || !_gaq) {
+    if (!configYouTubePlayer.trackProgress || typeof _gaq === 'undefined') {
         return;
     }
 
@@ -82,7 +82,7 @@ function onPlayerProgressChange() {
 }
 
 function onPlayerPlaybackQualityChange(event) {
-    if (!configYouTubePlayer.trackPlaybackQuality || !_gaq) {
+    if (!configYouTubePlayer.trackPlaybackQuality || typeof _gaq === 'undefined') {
         return;
     }
 
@@ -112,9 +112,12 @@ function onPlayerPlaybackQualityChange(event) {
 }
 
 function onPlayerStateChange(event) {
-    if (!_gaq) {
+    if (typeof _gaq === 'undefined') {
         return;
     }
+    
+    // Calculate percent complete
+    YT_GA.timePercentComplete = Math.round(YT_GA.player.getCurrentTime() / YT_GA.player.getDuration() * 100);
 
     if (event.data === YT.PlayerState.PLAYING && !YT_GA.videoPlayed) {
 
