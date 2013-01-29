@@ -120,8 +120,8 @@ Have a bug? Please create an issue here on GitHub!
 
 ## Changelog
 ### 0.3 (January 29, 2013):
- * Bug fixes
- * Updated documentation
+ * Bug fixes.
+ * Updated documentation.
 
 ### 0.2 (November 5, 2012):
  * Changed source to allow `http://` or `https://`
@@ -131,7 +131,7 @@ Have a bug? Please create an issue here on GitHub!
  * Restructured functions to be more efficient.
  * Code cleanup.
 
-### 0.1 (September 12, 12):
+### 0.1 (September 12, 2012):
  * Initial release.
 
 ## License
