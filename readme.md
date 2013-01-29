@@ -1,6 +1,63 @@
 # Google Analytics YouTube Video Tracking
 Tracking YouTube Player Events with Google Analytics.
 
+## Usage
+Include the scripts in the body section of the HTML document, just before the `</body>` tag. You’ll need to be running on a web server instead of opening the file directly in your browser. Flash and JS security restrictions will prevent the API from working when run locally.
+
+### Basic
+```html
+<script src="path/to/youtube.ga.min.js"></script>
+<script>
+	var configYouTubePlayer = {
+		videoID: 'Rk6_hdRtJOE' // The YouTube video ID that identifies the video that the player will load.
+	};	
+</script>
+```	
+### With some options
+```html
+<script src="path/to/youtube.ga.min.js"></script>
+<script>
+	var configYouTubePlayer = {
+        // The YouTube video ID that identifies the video that the player will load.
+        videoID: 'Rk6_hdRtJOE',
+
+        // The height of the video player. The default value is 390.
+        height: 390,
+
+        // The width of the video player. The default value is 640.
+        width: 640,
+
+        // Enable progress event tracking.
+        trackProgress: true,
+
+        // Enable video quality event tracking.
+        trackPlaybackQuality: true,
+
+        // YouTube Player API Reference
+        // @see https://developers.google.com/youtube/player_parameters?playerVersion=HTML5#Parameters
+        playerVars: {
+            'autohide': 1,
+            'autoplay': 1,
+            'rel': 0,
+            'theme': 'light'
+        }
+	};
+</script>	
+```
+
+Put the following div element inside the body element. The script will replace the div element with an iframe tag.
+```html
+<div id="ytplayer"></div>
+```
+The iframe embeds a YouTube video player and the YouTube iframe API posts content to the iframe tag on your page. This approach allows YouTube to serve an HTML5 player rather than a Flash player for mobile devices that do not support Flash.
+
+## Requirements
+* Google Analytics Tracking Code (asynchronous)
+* The end user must be using a browser that supports the HTML5 postMessage feature. Most modern browsers support postMessage, though Internet Explorer 7 does not support it.
+
+## Browser Support
+Tested in Chrome (21), Firefox (15), Safari (5,6), IE (8,9). Also tested on iOS.
+
 ## Event Tracking
 All player events are only tracked once, except for video quality events. Restarting the video will not reset the event trackers.
 
@@ -58,71 +115,30 @@ _gaq.push(['_trackEvent', 'YouTube', 'Video quality: 240p', 'http://www.youtube.
 ### Bounce rate
 The event trackers do not impact bounce rate of the page which embeds the video. The value of the opt_noninteraction parameter is set to `true`.
 
-
-## Usage
-Include the scripts in the body section of the HTML document, just before the `</body>` tag. You’ll need to be running on a web server instead of opening the file directly in your browser. Flash and JS security restrictions will prevent the API from working when run locally.
-
-### Basic
-```html
-<script src="path/to/youtube.ga.min.js"></script>
-<script>
-	var configYouTubePlayer = {
-		videoID: 'Rk6_hdRtJOE' // The YouTube video ID that identifies the video that the player will load.
-	};	
-</script>
-```	
-### With some options
-```html
-<script src="path/to/youtube.ga.min.js"></script>
-<script>
-	var configYouTubePlayer = {
-		videoID: 'Rk6_hdRtJOE', // The YouTube video ID that identifies the video that the player will load.
-		height: 390, // The height of the video player. The default value is 390.
-		width: 640, // The width of the video player. The default value is 640.
-		trackProgress: true, // Enable progress event tracking.
-		trackPlaybackQuality: true // // Enable video quality event tracking.
-	};
-</script>	
-```
-
-Put the following div element inside the body element. The script will replace the div element with an iframe tag.
-```html
-<div id="ytplayer"></div>
-```	
-The iframe embeds a YouTube video player and the YouTube iframe API posts content to the iframe tag on your page. This approach allows YouTube to serve an HTML5 player rather than a Flash player for mobile devices that do not support Flash.
-
-## Demo
-Demo will be available soon.
-
-## Requirements
-* Google Analytics Tracking Code (asynchronous)
-* The end user must be using a browser that supports the HTML5 postMessage feature. Most modern browsers support postMessage, though Internet Explorer 7 does not support it.
-
-## Browser Support
-Tested in Chrome (21), Firefox (15), Safari (5,6), IE (8,9). Also tested on iOS.
-
-## Contact
-If you have any questions please find me on Twitter at [@sanderheilbron](http://twitter.com/sanderheilbron) or send me an [email](mailto:sanderheilbron@gmail.com). 
-
 ## Issues
 Have a bug? Please create an issue here on GitHub!
 
 ## Changelog
-### 0.2 (11/05/12):
- - Changed source to allow http:// or https://
- - Changed from player_api to iframe_api.
- - Added option to pull in YouTube API playerVars.
- - Created namespace.
- - Restructured functions to be more efficient.
- - Code cleanup.
+### 0.3 (January 29, 2013):
+ * Bug fixes
+ * Updated documentation
 
-### 0.1 (9/12/12): 
- - Initial release.
+### 0.2 (November 5, 2012):
+ * Changed source to allow `http://` or `https://`
+ * Changed from `player_api` to `iframe_api`.
+ * Added option to pull in YouTube API `playerVars`.
+ * Created namespace.
+ * Restructured functions to be more efficient.
+ * Code cleanup.
+
+### 0.1 (September 12, 12):
+ * Initial release.
 
 ## License
 Licensed under the MIT license.
 
-Copyright (C) 2012 Sander Heilbron, http://sanderheilbron.nl
+Copyright (C) 2012-2013 Sander Heilbron, http://sanderheilbron.nl
+
 Edits by Ali Karbassi, http://karbassi.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
