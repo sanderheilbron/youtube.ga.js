@@ -14,17 +14,30 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var YT_GA = YT_GA || {};
 
 function onYouTubePlayerAPIReady() {
-    // Replace the 'ytplayer' element with an <iframe> and
-    // YouTube player after the API code downloads.
+    if (Object.prototype.toString.call(configYouTubePlayer) === '[object Array]') {
+        YT_GA = []
+        for (var i in configYouTubePlayer){
+            YT_GA.push(new youtube_ga(configYouTubePlayer[i]));
+        }
+    }
+
+    if (Object.prototype.toString.call(configYouTubePlayer) === '[object Object]') {
+        YT_GA = new youtube_ga(configYouTubePlayer);
+    }    
+}
+
+var youtube_ga = function _construct(configYouTubePlayer){
+    this.configYouTubePlayer = configYouTubePlayer;
+
     var playerOptions = {
         height: configYouTubePlayer.height,
         width: configYouTubePlayer.width,
         videoId: configYouTubePlayer.videoID,
         playerVars: {},
         events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange,
-            'onPlaybackQualityChange': onPlayerPlaybackQualityChange
+            'onReady': this.bind(this.onPlayerReady),
+            'onStateChange': this.bind(this.onPlayerStateChange),
+            'onPlaybackQualityChange': this.bind(this.onPlayerPlaybackQualityChange)
         }
     };
 
@@ -36,53 +49,61 @@ function onYouTubePlayerAPIReady() {
         playerOptions.playerVars[setting] = configYouTubePlayer.playerVars[setting];
     }
 
-    YT_GA.player = new YT.Player('ytplayer', playerOptions);
+    this.player = new YT.Player(configYouTubePlayer.element || 'ytplayer', playerOptions);
 }
 
-function onPlayerReady(event) {
+youtube_ga.prototype.bind = function(f) {
+    var self = this;
+    return function(){
+        f.apply(self, arguments);
+    }
+};
+
+youtube_ga.prototype.onPlayerReady = function onPlayerReady(event) {
     // Check video status every 500ms
-    setInterval(onPlayerProgressChange, 500);
+    setInterval(this.bind(this.onPlayerProgressChange), 500);
 
-    YT_GA.progress25 = false;
-    YT_GA.progress50 = false;
-    YT_GA.progress75 = false;
-    YT_GA.url = YT_GA.player.getVideoUrl();
-    YT_GA.videoPlayed = false;
-    YT_GA.videoCompleted = false;
+    this.progress25 = false;
+    this.progress50 = false;
+    this.progress75 = false;
+    this.url = this.player.getVideoUrl();
+    this.videoPlayed = false;
+    this.videoCompleted = false;
 }
 
-function onPlayerProgressChange() {
+youtube_ga.prototype.onPlayerProgressChange = function onPlayerProgressChange() {
+
     if (!configYouTubePlayer.trackProgress || typeof _gaq === 'undefined') {
         return;
     }
 
      // Calculate percent complete
-    YT_GA.timePercentComplete = Math.round(YT_GA.player.getCurrentTime() / YT_GA.player.getDuration() * 100);
+    this.timePercentComplete = Math.round(this.player.getCurrentTime() / this.player.getDuration() * 100);
 
     var progress;
 
-    if (YT_GA.timePercentComplete > 24 && !YT_GA.progress25) {
+    if (this.timePercentComplete > 24 && !this.progress25) {
         progress = '25%';
-        YT_GA.progress25 = true;
+        this.progress25 = true;
     }
 
-    if (YT_GA.timePercentComplete > 49 && !YT_GA.progress50) {
+    if (this.timePercentComplete > 49 && !this.progress50) {
         progress = '50%';
-        YT_GA.progress50 = true;
+        this.progress50 = true;
     }
 
-    if (YT_GA.timePercentComplete > 74 && !YT_GA.progress75) {
+    if (this.timePercentComplete > 74 && !this.progress75) {
         progress = '75%';
-        YT_GA.progress75 = true;
+        this.progress75 = true;
     }
 
     if (progress) {
-        _gaq.push(['_trackEvent', 'YouTube', 'Played video: ' + progress, YT_GA.url, undefined, true]);
+        _gaq.push(['_trackEvent', 'YouTube', 'Played video: ' + progress, this.url, undefined, true]);
     }
 }
 
-function onPlayerPlaybackQualityChange(event) {
-    if (!configYouTubePlayer.trackPlaybackQuality || typeof _gaq === 'undefined') {
+youtube_ga.prototype.onPlayerPlaybackQualityChange = function onPlayerPlaybackQualityChange(event) {
+    if (!this.configYouTubePlayer.trackPlaybackQuality || typeof _gaq === 'undefined') {
         return;
     }
 
@@ -107,34 +128,36 @@ function onPlayerPlaybackQualityChange(event) {
     }
 
     if (quality) {
-        _gaq.push(['_trackEvent', 'YouTube', 'Video quality: ' + quality, YT_GA.url, undefined, true]);
+        _gaq.push(['_trackEvent', 'YouTube', 'Video quality: ' + quality, this.url, undefined, true]);
     }
 }
 
-function onPlayerStateChange(event) {
+youtube_ga.prototype.onPlayerStateChange = function onPlayerStateChange(event) {
     if (typeof _gaq === 'undefined') {
         return;
     }
     
     // Calculate percent complete
-    YT_GA.timePercentComplete = Math.round(YT_GA.player.getCurrentTime() / YT_GA.player.getDuration() * 100);
+    this.timePercentComplete = Math.round(this.player.getCurrentTime() / this.player.getDuration() * 100);
 
-    if (event.data === YT.PlayerState.PLAYING && !YT_GA.videoPlayed) {
+    if (event.data === YT.PlayerState.PLAYING && !this.videoPlayed) {
 
         _gaq.push(['_trackEvent', 'YouTube', 'Started video', YT_GA.url, undefined, true]);
-        YT_GA.videoPaused = false;
-        YT_GA.videoPlayed = true; //  Avoid subsequent play trackings
+        this.videoPaused = false;
+        this.videoPlayed = true; //  Avoid subsequent play trackings
 
-    } else if (event.data === YT.PlayerState.PAUSED && (YT_GA.timePercentComplete < 92 && !YT_GA.videoPaused)) {
+    } else if (event.data === YT.PlayerState.PAUSED && (this.timePercentComplete < 92 && !this.videoPaused)) {
 
-        _gaq.push(['_trackEvent', 'YouTube', 'Paused video', YT_GA.url, undefined, true]);
-        YT_GA.videoPaused = true; // Avoid subsequent pause trackings
+        _gaq.push(['_trackEvent', 'YouTube', 'Paused video', this.url, undefined, true]);
+        this.videoPaused = true; // Avoid subsequent pause trackings
 
-    } else if (event.data === YT.PlayerState.ENDED && !YT_GA.videoCompleted) {
+    } else if (event.data === YT.PlayerState.ENDED && !this.videoCompleted) {
 
-        _gaq.push(['_trackEvent', 'YouTube', 'Completed video', YT_GA.url, undefined, true]);
-        YT_GA.videoCompleted = true; // Avoid subsequent finish trackings
+        _gaq.push(['_trackEvent', 'YouTube', 'Completed video', this.url, undefined, true]);
+        this.videoCompleted = true; // Avoid subsequent finish trackings
 
+        console.log(typeof this.configYouTubePlayer.videoEnd === 'function')
+
+        if (typeof this.configYouTubePlayer.videoEnd === 'function') { this.configYouTubePlayer.videoEnd()};
     }
-
 }
