@@ -73,7 +73,7 @@ youtube_ga.prototype.onPlayerReady = function onPlayerReady(event) {
 
 youtube_ga.prototype.onPlayerProgressChange = function onPlayerProgressChange() {
 
-    if (!configYouTubePlayer.trackProgress || typeof _gaq === 'undefined') {
+    if (!this.configYouTubePlayer.trackProgress || typeof _gaq === 'undefined') {
         return;
     }
 
@@ -155,8 +155,6 @@ youtube_ga.prototype.onPlayerStateChange = function onPlayerStateChange(event) {
 
         _gaq.push(['_trackEvent', 'YouTube', 'Completed video', this.url, undefined, true]);
         this.videoCompleted = true; // Avoid subsequent finish trackings
-
-        console.log(typeof this.configYouTubePlayer.videoEnd === 'function')
 
         if (typeof this.configYouTubePlayer.videoEnd === 'function') { this.configYouTubePlayer.videoEnd()};
     }
