@@ -30,6 +30,9 @@ Include the scripts in the body section of the HTML document, just before the `<
         // Enable progress event tracking.
         trackProgress: true,
 
+        // DOM element id (default ytplayer)
+        element: 'youtubePlayerHolder',
+
         // Enable video quality event tracking.
         trackPlaybackQuality: true,
 
@@ -43,6 +46,27 @@ Include the scripts in the body section of the HTML document, just before the `<
         }
 	};
 </script>	
+```
+
+### More than one video on Page
+```html
+<script src="path/to/youtube.ga.min.js"></script>
+<script>
+    var configYouTubePlayer = [{
+        videoID: 'Rk6_hdRtJOE', // The YouTube video ID that identifies the video that the player will load.
+        element: 'player1'      // DOM element is required for multi video tracking
+    },{
+        videoID: 'Rk6_hdRtJOE', 
+        element: 'player2'
+    },{
+        videoID: 'Rk6_hdRtJOE', 
+        element: 'player3'
+    }];  
+</script>
+
+<div id="player1"></div>
+<div id="player2"></div>
+<div id="player3"></div>
 ```
 
 Put the following div element inside the body element. The script will replace the div element with an iframe tag.
